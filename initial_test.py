@@ -4,7 +4,9 @@ from tkinter import ttk
 import tkinter as tk
 
 main = Tk()
+
 main.title('CITRIOT')
+
 ttk.Label(main, text="Citriot Data Acquisition System").grid(row=0)
 
 def toggledo1():
