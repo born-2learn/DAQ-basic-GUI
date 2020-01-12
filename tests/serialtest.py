@@ -25,7 +25,8 @@ def temp_data():
                     else:
                         temp_list.append(0)
                 except:
-                    pass
+                    temp_list.append(0)
+            print(temp_list)
             values = []
     return temp_list
 
