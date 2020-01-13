@@ -1,12 +1,10 @@
 from tkinter import *
-#from ttkinter import ttk
 from tkinter import ttk
 import tkinter as tk
+from PIL import Image, ImageTk
 
 main = Tk()
-
 main.title('CITRIOT')
-
 ttk.Label(main, text="Citriot Data Acquisition System").grid(row=0)
 
 def toggledo1():
@@ -82,6 +80,15 @@ nb.grid(row=1, column=0, columnspan=50, rowspan=49, sticky='NESW')
 # About
 aboutPage = ttk.Frame(nb)
 nb.add(aboutPage, text='About')
+#image = PhotoImage(file="logo.gif")
+#L = Label(aboutPage, image=image).pack()
+
+image = Image.open("logo.jpg")
+image = image.resize((500, 250), Image.ANTIALIAS) ## The (250, 250) is (height, width)
+img = ImageTk.PhotoImage(image)
+panel = Label(aboutPage, image = img)
+panel.pack(side = "bottom", fill = "both", expand = "yes")
+Label(aboutPage, text = "Citriot Data Acquisition System",font=("Helvetica", 24) ).pack()
 
 
 

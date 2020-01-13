@@ -1,5 +1,4 @@
 import serial
-#from flask import Flask
 
 def temp_data():
     ser = serial.Serial('/dev/ttyUSB0',9600)
