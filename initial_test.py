@@ -2,6 +2,17 @@ from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 from PIL import Image, ImageTk
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
+import time
+
+
+pinList=[25,17,18,27,22,23,24,10]
+
+for i in pinList:
+    GPIO.setup(i,GPIO.OUT)
+    GPIO.output(i,GPIO.LOW)
+    
 
 main = Tk()
 main.title('CITRIOT')
@@ -11,57 +22,75 @@ def toggledo1():
 
         if do1.config('text')[-1] == 'ON':
                 do1.config(text='OFF')
+                GPIO.output(25,GPIO.LOW)
         else:
                 do1.config(text='ON')
+                GPIO.output(25,GPIO.HIGH)
 
 def toggledo2():
        
         if do2.config('text')[-1] == 'ON':
                 do2.config(text='OFF')
+                GPIO.output(17,GPIO.LOW)
+        
         else:
                 do2.config(text='ON')
+                GPIO.output(17,GPIO.HIGH)
 
 def toggledo3():
 
         if do3.config('text')[-1] == 'ON':
                 do3.config(text='OFF')
+                GPIO.output(18,GPIO.LOW)
         else:
                 do3.config(text='ON')
+                GPIO.output(18,GPIO.HIGH)
 
 def toggledo4():
 
         if do4.config('text')[-1] == 'ON':
                 do4.config(text='OFF')
+                GPIO.output(27,GPIO.LOW)
+                
         else:
                 do4.config(text='ON')
+                GPIO.output(27,GPIO.HIGH)
 
 def toggledo5():
 
         if do5.config('text')[-1] == 'ON':
                 do5.config(text='OFF')
+                GPIO.output(22,GPIO.LOW)
         else:
                 do5.config(text='ON')
+                GPIO.output(22,GPIO.HIGH)
 
 def toggledo6():
 
         if do6.config('text')[-1] == 'ON':
                 do6.config(text='OFF')
+                GPIO.output(23,GPIO.LOW)
         else:
                 do6.config(text='ON')
+                GPIO.output(23,GPIO.HIGH)
 
 def toggledo7():
 
         if do7.config('text')[-1] == 'ON':
                 do7.config(text='OFF')
+                GPIO.output(24,GPIO.LOW)
         else:
                 do7.config(text='ON')
+                GPIO.output(24,GPIO.HIGH)
 
 def toggledo8():
 
         if do8.config('text')[-1] == 'ON':
                 do8.config(text='OFF')
+                GPIO.output(10,GPIO.LOW)
         else:
                 do8.config(text='ON')
+                GPIO.output(10,GPIO.HIGH)
 
 main.geometry('500x500')
 
