@@ -1,7 +1,7 @@
 import serial
 
 def temp_data():
-    ser = serial.Serial('/dev/ttyUSB0',9600)
+    ser = serial.Serial('/dev/ttyACM0',9600)
     
     values = []
     temp_list =[]

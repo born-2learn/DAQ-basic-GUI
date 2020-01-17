@@ -6,7 +6,7 @@ from serial import *
 
 serialPort = "/dev/ttyACM0"
 baudRate = 9600
-ser = Serial(serialPort , baudRate, timeout=0, writeTimeout=0) #ensure non-blocking
+ser = Serial(serialPort , baudRate) #ensure non-blocking
 
 #make a TkInter Window
 root = Tk()
