@@ -74,7 +74,7 @@ def get_data():
         except TypeError:
             pass
     
-    
+     
         
 
 def update_gui():
@@ -92,6 +92,17 @@ def update_gui():
     progress_3.place(x = 60, y = 160)
     progress_4.place(x = 60, y = 190)
     progress_5.place(x = 60, y = 220)
+    progress_6.place(x = 60, y = 250)
+    progress_7.place(x = 60, y = 280)
+    progress_8.place(x = 60, y = 310)
+    progress_9.place(x = 60, y = 340)
+    progress_10.place(x = 60, y = 370)
+    progress_11.place(x = 60, y = 400)
+    progress_12.place(x = 60, y = 430)
+    progress_13.place(x = 60, y = 460)
+    progress_14.place(x = 60, y = 490)
+    progress_15.place(x = 60, y = 520)
+    progress_16.place(x = 60, y = 550)
     new = time.time()
     
     while(1):
@@ -115,7 +126,8 @@ def update_gui():
                 progress_13["value"] = filter_data[12]
                 progress_14["value"] = filter_data[13]
                 progress_15["value"] = filter_data[14]
-
+                progress_16["value"] = filter_data[15]
+                
 
             except :
                 pass
@@ -194,22 +206,22 @@ if __name__ == "__main__":
 
     
     #Labels
-    data1_ = Label(text = "Data1:").place(x = 15, y= 100)
-    data2_ = Label(text = "Data2:").place(x = 15, y= 130)
-    data3_ = Label(text = "Data3:").place(x = 15, y= 160)
-    data4_ = Label(text = "Data4:").place(x = 15, y= 190)
-    data5_ = Label(text = "Data5:").place(x = 15, y= 220)
-    data6_ = Label(text="Data6:").place(x=15, y=250)
-    data7_ = Label(text="Data7:").place(x=15, y=280)
-    data8_ = Label(text="Data8:").place(x=15, y=310)
+    data1_ = Label(text = "Thermocouple 1").place(x = 15, y= 100)
+    data2_ = Label(text = "Thermocouple 2").place(x = 15, y= 130)
+    data3_ = Label(text = "Thermocouple 3").place(x = 15, y= 160)
+    data4_ = Label(text = "Thermocouple 4").place(x = 15, y= 190)
+    data5_ = Label(text = "Thermocouple 5").place(x = 15, y= 220)
+    data6_ = Label(text= "Thermocouple 6").place(x=15, y=250)
+    data7_ = Label(text= "Thermocouple 7").place(x=15, y=280)
+    data8_ = Label(text= "Thermocouple 8").place(x=15, y=310)
     data9_ = Label(text="Data9:").place(x=15, y=340)
-    data10_ = Label(text="Data10:").place(x=15, y=370)
-    data11_ = Label(text="Data11:").place(x=15, y=400)
-    data12_ = Label(text="Data12:").place(x=15, y=430)
-    data13_ = Label(text="Data13:").place(x=15, y=460)
-    data14_ = Label(text="Data14:").place(x=15, y=490)
-    data15_ = Label(text="Data15:").place(x=15, y=520)
-    data16_ = Label(text="Data16:").place(x=15, y=550)
+    data10_ = Label(text= "Data10:").place(x=15, y=370)
+    data11_ = Label(text= "Data11:").place(x=15, y=400)
+    data12_ = Label(text= "Data12:").place(x=15, y=430)
+    data13_ = Label(text= "Data13:").place(x=15, y=460)
+    data14_ = Label(text= "Data14:").place(x=15, y=490)
+    data15_ = Label(text= "Data15:").place(x=15, y=520)
+    data16_ = Label(text= "Data16:").place(x=15, y=550)
 
     baud   = Label(text = "Baud").place(x = 100, y = 348)
     port   = Label(text = "Port").place(x = 200, y = 348)
@@ -221,6 +233,17 @@ if __name__ == "__main__":
     progress_3 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
     progress_4 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
     progress_5 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
+    progress_6 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
+    progress_7 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
+    progress_8 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
+    progress_9 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
+    progress_10 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
+    progress_11 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
+    progress_12 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
+    progress_13 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
+    progress_14 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
+    progress_15 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
+    progress_16 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
 
 
 
