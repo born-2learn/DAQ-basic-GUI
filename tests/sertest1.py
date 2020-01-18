@@ -1,7 +1,7 @@
 import time
 import threading
-import tkinter
-import ttk
+import tkinter as tk
+from tkinter import ttk
 from tkinter import *
 import serial
 
@@ -27,24 +27,23 @@ def connect():
     """
 
     version_ = button_var.get()
-    print version_
+
     global serial_object
-    port = port_entry.get()
-    baud = baud_entry.get()
+
+    baud = 9600
     
 
     try:
-        if version_ == 2:
+
             try:
-                serial_object = serial.Serial('/dev/tty' + str(port), baud)
+                serial_object = serial.Serial('/dev/ttyACM0', baud)
             
             except:
-                print "Cant Open Specified Port"
-        elif version_ == 1:
-            serial_object = serial.Serial('COM' + str(port), baud)
+                print("Cant Open Specified Port")
+
 
     except ValueError:
-        print "Enter Baud and Port"
+        print("Enter Baud and Port")
         return
 
     t1 = threading.Thread(target = get_data)
@@ -63,10 +62,14 @@ def get_data():
 
     while(1):   
         try:
-            serial_data = serial_object.readline().strip('\n').strip('\r')
+            serial_data = serial_object.readline()
+            serial_data = serial_data.decode("utf-8")
+            serial_data.rstrip('\r\n')
+            #serial_data = serial_object.readline()
             
             filter_data = serial_data.split(',')
-            print filter_data
+            #filter_data = serial_data
+            print (filter_data)
         
         except TypeError:
             pass
@@ -106,7 +109,14 @@ def update_gui():
                 progress_7["value"] = filter_data[6]
                 progress_8["value"] = filter_data[7]
                 progress_9["value"] = filter_data[8]
-                    
+                progress_10["value"] = filter_data[9]
+                progress_11["value"] = filter_data[10]
+                progress_12["value"] = filter_data[11]
+                progress_13["value"] = filter_data[12]
+                progress_14["value"] = filter_data[13]
+                progress_15["value"] = filter_data[14]
+
+
             except :
                 pass
 
@@ -122,6 +132,13 @@ def update_gui():
                 progress_7["value"] = 0
                 progress_8["value"] = 0
                 progress_9["value"] = 0
+                progress_10["value"] = 0
+                progress_11["value"] = 0
+                progress_12["value"] = 0
+                progress_13["value"] = 0
+                progress_14["value"] = 0
+                progress_15["value"] = 0
+                progress_16["value"] = 0
                 new = time.time()
 
 
@@ -135,7 +152,7 @@ def send():
     send_data = data_entry.get()
     
     if not send_data:
-        print "Sent Nothing"
+        print ("Sent Nothing")
     
     serial_object.write(send_data)
 
@@ -152,7 +169,7 @@ def disconnect():
         serial_object.close() 
     
     except AttributeError:
-        print "Closed without Using it -_-"
+        print( "Closed without Using it -_-")
 
     gui.quit()
 
@@ -182,6 +199,17 @@ if __name__ == "__main__":
     data3_ = Label(text = "Data3:").place(x = 15, y= 160)
     data4_ = Label(text = "Data4:").place(x = 15, y= 190)
     data5_ = Label(text = "Data5:").place(x = 15, y= 220)
+    data6_ = Label(text="Data6:").place(x=15, y=250)
+    data7_ = Label(text="Data7:").place(x=15, y=280)
+    data8_ = Label(text="Data8:").place(x=15, y=310)
+    data9_ = Label(text="Data9:").place(x=15, y=340)
+    data10_ = Label(text="Data10:").place(x=15, y=370)
+    data11_ = Label(text="Data11:").place(x=15, y=400)
+    data12_ = Label(text="Data12:").place(x=15, y=430)
+    data13_ = Label(text="Data13:").place(x=15, y=460)
+    data14_ = Label(text="Data14:").place(x=15, y=490)
+    data15_ = Label(text="Data15:").place(x=15, y=520)
+    data16_ = Label(text="Data16:").place(x=15, y=550)
 
     baud   = Label(text = "Baud").place(x = 100, y = 348)
     port   = Label(text = "Port").place(x = 200, y = 348)
@@ -200,13 +228,6 @@ if __name__ == "__main__":
     data_entry = Entry()
     data_entry.place(x = 100, y = 255)
     
-    baud_entry = Entry(width = 7)
-    baud_entry.place(x = 100, y = 365)
-    
-    port_entry = Entry(width = 7)
-    port_entry.place(x = 200, y = 365)
-
-
 
     #radio button
     button_var = IntVar()

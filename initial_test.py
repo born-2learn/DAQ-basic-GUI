@@ -122,15 +122,6 @@ Label(aboutPage, text = "Citriot Data Acquisition System",font=("Helvetica", 24)
 
 
 
-
-
-
-
-
-
-
-
-
 # DO
 doPage = ttk.Frame(nb)
 nb.add(doPage, text='Digital Output')
@@ -175,7 +166,6 @@ do8.grid(row=8, column = 1)
 
 
 
-
 # DI
 
 diPage = ttk.Frame(nb)
@@ -188,12 +178,10 @@ nb.add(diPage, text='Digital Input')
 
 
 
-
 # Thermocouple
 thermocouplePage = ttk.Frame(nb)
 nb.add(thermocouplePage, text='Thermocouple')
 #nb.Label(main, text="Citriot Data Acquisition System").grid(row=5)
-
 
 
 

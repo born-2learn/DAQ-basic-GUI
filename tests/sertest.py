@@ -31,6 +31,7 @@ serBuffer = ""
 
 def readSerial():
     while True:
+        '''
         c = ser.read() # attempt to read a character from Serial
         
         #was anything read?
@@ -52,7 +53,12 @@ def readSerial():
             serBuffer = "" # empty the buffer
         else:
             serBuffer += c # add to the buffer
-    
+        '''
+        global serBuffer
+        serBuffer = ser.readline()
+        log.insert('0.0', serBuffer)
+        serBuffer = ""
+
     root.after(10, readSerial) # check serial again soon
 
 
