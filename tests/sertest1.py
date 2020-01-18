@@ -5,7 +5,6 @@ from tkinter import ttk
 from tkinter import *
 import serial
 
-
 serial_data = ''
 filter_data = ''
 update_period = 5
@@ -228,6 +227,9 @@ if __name__ == "__main__":
     contact = Label(text = "pratik.gurudatt@gmail.com").place(x = 250, y = 437)
 
     #progress_bars
+    #Labels
+    label1 = Label( gui, textvariable=filter_data[0], relief=RAISED )
+    label1.pack()
     progress_1 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
     progress_2 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
     progress_3 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
@@ -265,3 +267,4 @@ if __name__ == "__main__":
     #mainloop
     gui.geometry('500x500')
     gui.mainloop()
+    
