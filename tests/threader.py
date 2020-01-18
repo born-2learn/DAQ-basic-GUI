@@ -16,9 +16,9 @@ gui.title("Citriot DAQ")
 def connect():
     """The function initiates the Connection to the UART device with the Port and Buad fed through the Entry
     boxes in the application.
-    The radio button selects the platform, as the serial object has different key phrases 
+    The radio button selects the platform, as the serial object has different key phrases
     for Linux and Windows. Some Exceptions have been made to prevent the app from crashing,
-    such as blank entry fields and value errors, this is due to the state-less-ness of the 
+    such as blank entry fields and value errors, this is due to the state-less-ness of the
     UART device, the device sends data at regular intervals irrespective of the master's state.
     The other Parts are self explanatory.
     """
@@ -29,15 +29,10 @@ def connect():
 
     baud = 9600
     try:
+        serial_object = serial.Serial('/dev/ttyACM0', baud)
 
-        try:
-            serial_object = serial.Serial('/dev/ttyACM0', baud)
-
-        except:
-            print("Cant Open Specified Port")
-    except ValueError:
-        print("Enter Baud and Port")
-        return
+    except:
+        print("Can't open port ACM0")
 
     t1 = threading.Thread(target=get_data)
     t1.daemon = True
@@ -45,7 +40,7 @@ def connect():
 
 
 def get_data():
-    """This function serves the purpose of collecting data from the serial object and storing 
+    """This function serves the purpose of collecting data from the serial object and storing
     the filtered data into a global variable.
     The function has been put into a thread since the serial event is a blocking function.
     """
@@ -70,17 +65,18 @@ def get_data():
 def update_gui():
     """" This function is an update function which is also threaded. The function assimilates the data
     and applies it to it corresponding progress bar. The text box is also updated every couple of seconds.
-    A simple auto refresh function .after() could have been used, this has been avoid purposely due to 
+    A simple auto refresh function .after() could have been used, this has been avoid purposely due to
     various performance issues.
     """
     global filter_data
     global update_period
 
     text.place(x=15, y=10)
-    #progress_1.place(x=60, y=100)
-    #l1.place(x=60, y=100)
+    progress_1.place(x=60, y=100)
+    # l1.place(x=60, y=100)
     l1.pack()
-    progress_2.place(x=60, y=130)
+    #progress_2.place(x=60, y=130)
+    '''
     progress_3.place(x=60, y=160)
     progress_4.place(x=60, y=190)
     progress_5.place(x=60, y=220)
@@ -95,19 +91,28 @@ def update_gui():
     progress_14.place(x=60, y=490)
     progress_15.place(x=60, y=520)
     progress_16.place(x=60, y=550)
+    '''
     new = time.time()
     global var
     while (1):
         if filter_data:
 
             var = 0
-
-            text.insert(END, filter_data)
-            text.insert(END, "\n")
+            text.delete("1.0", END)
             try:
+                filter_data[0] = float(filter_data[0])
+            except:
+                filter_data[0] = ''
+
+            text.insert(END, filter_data[0])
+            #text.insert(END, "\n")
+            try:
+
+
                 progress_1["value"] = filter_data[0]
                 var = filter_data[0]
-                progress_2["value"] = filter_data[1]
+                #progress_2["value"] = filter_data[1]
+                '''
                 progress_3["value"] = filter_data[2]
                 progress_4["value"] = filter_data[3]
                 progress_5["value"] = filter_data[4]
@@ -122,6 +127,7 @@ def update_gui():
                 progress_14["value"] = filter_data[13]
                 progress_15["value"] = filter_data[14]
                 progress_16["value"] = filter_data[15]
+                '''
 
 
             except:
@@ -130,6 +136,7 @@ def update_gui():
             if time.time() - new >= update_period:
                 text.delete("1.0", END)
                 progress_1["value"] = 0
+                '''
                 progress_2["value"] = 0
                 progress_3["value"] = 0
                 progress_4["value"] = 0
@@ -145,17 +152,18 @@ def update_gui():
                 progress_14["value"] = 0
                 progress_15["value"] = 0
                 progress_16["value"] = 0
+                '''
                 new = time.time()
 
 
 def send():
     """This function is for sending data from the computer to the host controller.
-    
+
         The value entered in the the entry box is pushed to the UART. The data can be of any format, since
         the data is always converted into ASCII, the receiving device has to convert the data into the required f
         format.
     """
-    send_data = data_entry.get()
+
 
     if not send_data:
         print("Sent Nothing")
@@ -164,7 +172,7 @@ def send():
 
 
 def disconnect():
-    """ 
+    """
     This function is for disconnecting and quitting the application.
     Sometimes the application throws a couple of errors while it is being shut down, the fix isn't out yet
     but will be pushed to the repo once done.
@@ -188,7 +196,7 @@ if __name__ == "__main__":
     # frames
     frame_1 = Frame(height=285, width=480, bd=3, relief='groove').place(x=7, y=5)
     frame_2 = Frame(height=150, width=480, bd=3, relief='groove').place(x=7, y=300)
-    text = Text(width=65, height=5)
+    text = Text(width=30, height=1)
 
     # threads
     t2 = threading.Thread(target=update_gui)
@@ -197,6 +205,7 @@ if __name__ == "__main__":
 
     # Labels
     data1_ = Label(text="Thermocouple 1").place(x=15, y=100)
+    '''
     data2_ = Label(text="Thermocouple 2").place(x=15, y=130)
     data3_ = Label(text="Thermocouple 3").place(x=15, y=160)
     data4_ = Label(text="Thermocouple 4").place(x=15, y=190)
@@ -212,17 +221,16 @@ if __name__ == "__main__":
     data14_ = Label(text="Data14:").place(x=15, y=490)
     data15_ = Label(text="Data15:").place(x=15, y=520)
     data16_ = Label(text="Data16:").place(x=15, y=550)
-
-
-
+    '''
 
     # progress_bars
     # Labels
     var = 10
-    print("FIlter data in _main_ -------------------------",filter_data)
-    l1 = ttk.Label(text='he',textvariable = var)
+    #print("FIlter data in _main_ -------------------------", filter_data)
+    l1 = ttk.Label(text='he', textvariable=var)
     # label1.pack()
-    progress_1 = ttk.Progressbar(orient = HORIZONTAL, mode = 'determinate', length = 200, max = 255)
+    progress_1 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
+    '''
     progress_2 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
     progress_3 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
     progress_4 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
@@ -238,18 +246,13 @@ if __name__ == "__main__":
     progress_14 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
     progress_15 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
     progress_16 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
+    '''
 
-    # Entry
-    data_entry = Entry()
-    data_entry.place(x=100, y=255)
 
-    # radio button
     button_var = IntVar()
-    radio_1 = Radiobutton(text="Windows", variable=button_var, value=1).place(x=10, y=315)
-    radio_2 = Radiobutton(text="Linux", variable=button_var, value=2).place(x=110, y=315)
 
-    # button
-    button1 = Button(text="Send", command=send, width=6).place(x=15, y=250)
+
+
     connect = Button(text="Connect", command=connect).place(x=15, y=360)
     disconnect = Button(text="Disconnect", command=disconnect).place(x=300, y=360)
 
