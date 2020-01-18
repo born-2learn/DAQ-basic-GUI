@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import time
 import threading
 import tkinter as tk
@@ -6,7 +8,19 @@ from tkinter import *
 import serial
 from PIL import Image, ImageTk
 import RPi.GPIO as GPIO
+
 GPIO.setmode(GPIO.BCM)
+
+doPinlist = [25, 17, 18, 27, 22, 23, 24, 10]
+diPinlist = [5, 6, 13, 19, 26, 16, 20, 21]
+
+for i in doPinlist:
+    GPIO.setup(i, GPIO.OUT)
+    GPIO.output(i, GPIO.LOW)
+
+for i in diPinlist:
+    GPIO.setup(i, GPIO.IN)
+
 
 serial_data = ''
 filter_data = ''
@@ -89,108 +103,13 @@ def toggledo8():
         do8.config(text='ON')
         GPIO.output(10, GPIO.HIGH)
 
+
 # gives weight to the cells in the grid
 rows = 0
 while rows < 50:
     main.rowconfigure(rows, weight=1)
     main.columnconfigure(rows, weight=1)
     rows += 1
-
-# Defines and places the notebook widget
-nb = ttk.Notebook(main)
-nb.grid(row=1, column=0, columnspan=50, rowspan=49, sticky='NESW')
-
-
-# About
-aboutPage = ttk.Frame(nb)
-nb.add(aboutPage, text='About')
-#image = PhotoImage(file="logo.gif")
-#L = Label(aboutPage, image=image).pack()
-
-image = Image.open("logo.jpg")
-image = image.resize((500, 250), Image.ANTIALIAS) ## The (250, 250) is (height, width)
-img = ImageTk.PhotoImage(image)
-panel = Label(aboutPage, image = img)
-panel.pack(side = "bottom", fill = "both", expand = "yes")
-Label(aboutPage, text = "Citriot Data Acquisition System",font=("Helvetica", 24) ).pack()
-
-doPage = ttk.Frame(nb)
-nb.add(doPage, text='Digital Output')
-
-Label(doPage, text="DO 1").grid(column=0,row=1,padx=10,pady=10)
-do1 = Button(doPage, text="OFF", width=12, command=toggledo1)
-do1.grid(row=1, column = 1)
-
-Label(doPage, text="DO 2").grid(column=0,row=2,padx=10,pady=10)
-do2 = Button(doPage, text="OFF", width=12, command=toggledo2)
-do2.grid(row=2, column = 1)
-
-Label(doPage, text="DO 3").grid(column=0,row=3,padx=10,pady=10)
-do3 = Button(doPage, text="OFF", width=12, command=toggledo3)
-do3.grid(row=3, column = 1)
-
-Label(doPage, text="DO 4").grid(column=0,row=4,padx=10,pady=10)
-do4 = Button(doPage, text="OFF", width=12, command=toggledo4)
-do4.grid(row=4, column = 1)
-
-Label(doPage, text="DO 5").grid(column=0,row=5,padx=10,pady=10)
-do5 = Button(doPage, text="OFF", width=12, command=toggledo5)
-do5.grid(row=5, column = 1)
-
-Label(doPage, text="DO 6").grid(column=0,row=6,padx=10,pady=10)
-do6 = Button(doPage, text="OFF", width=12, command=toggledo6)
-do6.grid(row=6, column = 1)
-
-Label(doPage, text="DO 7").grid(column=0,row=7,padx=10,pady=10)
-do7 = Button(doPage, text="OFF", width=12, command=toggledo7)
-do7.grid(row=7, column = 1)
-
-Label(doPage, text="DO 8").grid(column=0,row=8,padx=10,pady=10)
-do8 = Button(doPage, text="OFF", width=12, command=toggledo8)
-do8.grid(row=8, column = 1)
-
-
-
-
-
-
-
-
-
-# DI
-
-diPage = ttk.Frame(nb)
-nb.add(diPage, text='Digital Input')
-
-
-
-
-
-
-
-
-# Thermocouple
-thermocouplePage = ttk.Frame(nb)
-nb.add(thermocouplePage, text='Thermocouple')
-#nb.Label(main, text="Citriot Data Acquisition System").grid(row=5)
-
-
-
-
-
-
-
-
-
-
-# Analog Input
-analogPage = ttk.Frame(nb)
-nb.add(analogPage, text='Analog Input')
-
-
-# DO
-doPage = ttk.Frame(nb)
-nb.add(doPage, text='Digital Output')
 
 
 def connect():
@@ -226,7 +145,8 @@ def get_data():
     """
     global serial_object
     global filter_data
-
+    global di_data
+    di_data = [0,0,0,0,0,0,0,0]
     while (1):
         try:
             serial_data = serial_object.readline()
@@ -235,6 +155,18 @@ def get_data():
             # serial_data = serial_object.readline()
 
             filter_data = serial_data.split(',')
+            for i in range(len(filter_data)):
+                if float(filter_data[i])>500.00 or float(filter_data[i])==0:
+                    filter_data[i] = 'NAN'
+
+
+            for i in range(len(diPinlist)):
+                di_data[i] = GPIO.input(diPinlist[i])
+                if di_data[i]==1:
+                    di_data[i] = 'OFF'
+                else:
+                    di_data[i] = 'ON'
+
 
             print(filter_data)
 
@@ -250,12 +182,45 @@ def update_main():
     """
     global filter_data
     global update_period
+    global di_data
 
-    text.place(x=15, y=10)
-    progress_1.place(x=60, y=100)
+    # thermocouple component packing(label: text)
+    thermocoupleText1.grid(column=2, row=1)
+    thermocoupleText2.grid(column=2, row=2)
+    thermocoupleText3.grid(column=2, row=3)
+    thermocoupleText4.grid(column=2, row=4)
+    thermocoupleText5.grid(column=2, row=5)
+    thermocoupleText6.grid(column=2, row=6)
+    thermocoupleText7.grid(column=2, row=7)
+    thermocoupleText8.grid(column=2, row=8)
+
+    analogText1.grid(column = 2, row=1)
+    analogText2.grid(column=2, row=2)
+    analogText3.grid(column=2, row=3)
+    analogText4.grid(column=2, row=4)
+    analogText5.grid(column=2, row=5)
+    analogText6.grid(column=2, row=6)
+    analogText7.grid(column=2, row=7)
+    analogText8.grid(column=2, row=8)
+
+    diText1.grid(column=2, row=1)
+    diText2.grid(column=2, row=2)
+    diText3.grid(column=2, row=3)
+    diText4.grid(column=2, row=4)
+    diText5.grid(column=2, row=5)
+    diText6.grid(column=2, row=6)
+    diText7.grid(column=2, row=7)
+    diText8.grid(column=2, row=8)
+
+
+
+
+
+    # text.place(thermocouplePage, x=15, y=10)
+    # progress_1.grid(column = 1, row = 6)
     # l1.place(x=60, y=100)
-    l1.pack()
-    #progress_2.place(x=60, y=130)
+    # l1.pack()
+    # progress_2.place(x=60, y=130)
     '''
     progress_3.place(x=60, y=160)
     progress_4.place(x=60, y=190)
@@ -278,20 +243,83 @@ def update_main():
         if filter_data:
 
             var = 0
-            text.delete("1.0", END)
+            var = filter_data[0]
+
+            '''
+            thermocoupleText1.delete("1.0", END)
+            thermocoupleText2.delete("1.0", END)
+            thermocoupleText3.delete("1.0", END)
+            thermocoupleText4.delete("1.0", END)
+            thermocoupleText5.delete("1.0", END)
+            thermocoupleText6.delete("1.0", END)
+            thermocoupleText7.delete("1.0", END)
+            thermocoupleText8.delete("1.0", END)
+            analogText1.delete("1.0", END)
+            analogText2.delete("1.0", END)
+            analogText3.delete("1.0", END)
+            analogText4.delete("1.0", END)
+            analogText5.delete("1.0", END)
+            analogText6.delete("1.0", END)
+            analogText7.delete("1.0", END)
+            analogText8.delete("1.0", END)
+            diText1.delete("1.0", END)
+            diText2.delete("1.0", END)
+            diText3.delete("1.0", END)
+            diText4.delete("1.0", END)
+            diText5.delete("1.0", END)
+            diText6.delete("1.0", END)
+            diText7.delete("1.0", END)
+            diText8.delete("1.0", END)
+            '''
+
+
+            thermocoupleText1.config(text = filter_data[0])
+            thermocoupleText2.config(text = filter_data[1])
+            thermocoupleText3.config(text = filter_data[2])
+            thermocoupleText4.config(text = filter_data[3])
+            thermocoupleText5.config(text = filter_data[4])
+            thermocoupleText6.config(text = filter_data[5])
+            thermocoupleText7.config(text = filter_data[6])
+            thermocoupleText8.config(text = filter_data[7])
+
+            analogText1.config(text = filter_data[8])
+            analogText2.config(text = filter_data[9])
+            analogText3.config(text = filter_data[10])
+            analogText4.config(text = filter_data[11])
+            analogText5.config(text = filter_data[12])
+            analogText6.config(text = filter_data[13])
+            analogText7.config(text = filter_data[14])
+            analogText8.config(text = filter_data[15])
+
+            diText1.config(text = di_data[0])
+            diText2.config(text=di_data[1])
+            diText3.config(text=di_data[2])
+            diText4.config(text=di_data[3])
+            diText5.config(text=di_data[4])
+            diText6.config(text=di_data[5])
+            diText7.config(text=di_data[6])
+            diText8.config(text=di_data[7])
+
             try:
-                filter_data[0] = float(filter_data[0])
+                diText1.insert(END, di_data[0])
+                diText2.insert(END, di_data[1])
+                diText3.insert(END, di_data[2])
+                diText4.insert(END, di_data[3])
+                diText5.insert(END, di_data[4])
+                diText6.insert(END, di_data[5])
+                diText7.insert(END, di_data[6])
+                diText8.insert(END, di_data[7])
             except:
-                filter_data[0] = ''
+                pass
+                #print('no DI values shown')
 
-            text.insert(END, filter_data[0])
-            #text.insert(END, "\n")
+            #time.sleep(0.1)
+            # text.insert(END, "\n")
             try:
 
-
-                progress_1["value"] = filter_data[0]
+                # progress_1["value"] = filter_data[0]
                 var = filter_data[0]
-                #progress_2["value"] = filter_data[1]
+                # progress_2["value"] = filter_data[1]
                 '''
                 progress_3["value"] = filter_data[2]
                 progress_4["value"] = filter_data[3]
@@ -314,9 +342,36 @@ def update_main():
                 print('Error! Unable to store data as values to progress bars.')
 
             if time.time() - new >= update_period:
-                text.delete("1.0", END)
-                progress_1["value"] = 0
                 '''
+                thermocoupleText1.delete("1.0", END)
+                thermocoupleText2.delete("1.0", END)
+                thermocoupleText3.delete("1.0", END)
+                thermocoupleText4.delete("1.0", END)
+                thermocoupleText5.delete("1.0", END)
+                thermocoupleText6.delete("1.0", END)
+                thermocoupleText7.delete("1.0", END)
+                thermocoupleText8.delete("1.0", END)
+
+                analogText1.delete("1.0", END)
+                analogText2.delete("1.0", END)
+                analogText3.delete("1.0", END)
+                analogText4.delete("1.0", END)
+                analogText5.delete("1.0", END)
+                analogText6.delete("1.0", END)
+                analogText7.delete("1.0", END)
+                analogText8.delete("1.0", END)
+
+                diText1.delete("1.0", END)
+                diText2.delete("1.0", END)
+                diText3.delete("1.0", END)
+                diText4.delete("1.0", END)
+                diText5.delete("1.0", END)
+                diText6.delete("1.0", END)
+                diText7.delete("1.0", END)
+                diText8.delete("1.0", END)
+                
+                progress_1["value"] = 0
+                
                 progress_2["value"] = 0
                 progress_3["value"] = 0
                 progress_4["value"] = 0
@@ -334,7 +389,6 @@ def update_main():
                 progress_16["value"] = 0
                 '''
                 new = time.time()
-
 
 
 def disconnect():
@@ -360,9 +414,106 @@ if __name__ == "__main__":
     """
     global var
     # frames
-    frame_1 = Frame(height=285, width=480, bd=3, relief='groove').place(x=7, y=5)
-    frame_2 = Frame(height=150, width=480, bd=3, relief='groove').place(x=7, y=300)
-    text = Text(width=30, height=1)
+    # frame_1 = Frame(height=285, width=480, bd=3, relief='groove').place(x=7, y=5)
+    # frame_2 = Frame(height=150, width=480, bd=3, relief='groove').place(x=7, y=300)
+    nb = ttk.Notebook(main)
+    nb.grid(row=1, column=0, columnspan=50, rowspan=49, sticky='NESW')
+
+    # About
+    aboutPage = ttk.Frame(nb)
+    nb.add(aboutPage, text='About')
+    # image = PhotoImage(file="logo.gif")
+    # L = Label(aboutPage, image=image).pack()
+
+    image = Image.open("logo.jpg")
+    image = image.resize((500, 250), Image.ANTIALIAS)  ## The (250, 250) is (height, width)
+    img = ImageTk.PhotoImage(image)
+    panel = Label(aboutPage, image=img)
+    panel.pack(side="bottom", fill="both", expand="yes")
+    Label(aboutPage, text="Citriot Data Acquisition System", font=("Helvetica", 24)).pack()
+
+    doPage = ttk.Frame(nb)
+    nb.add(doPage, text='Digital Output')
+
+    Label(doPage, text="DO 1").grid(column=0, row=1, padx=10, pady=10)
+    do1 = Button(doPage, text="OFF", width=12, command=toggledo1)
+    do1.grid(row=1, column=1)
+
+    Label(doPage, text="DO 2").grid(column=0, row=2, padx=10, pady=10)
+    do2 = Button(doPage, text="OFF", width=12, command=toggledo2)
+    do2.grid(row=2, column=1)
+
+    Label(doPage, text="DO 3").grid(column=0, row=3, padx=10, pady=10)
+    do3 = Button(doPage, text="OFF", width=12, command=toggledo3)
+    do3.grid(row=3, column=1)
+
+    Label(doPage, text="DO 4").grid(column=0, row=4, padx=10, pady=10)
+    do4 = Button(doPage, text="OFF", width=12, command=toggledo4)
+    do4.grid(row=4, column=1)
+
+    Label(doPage, text="DO 5").grid(column=0, row=5, padx=10, pady=10)
+    do5 = Button(doPage, text="OFF", width=12, command=toggledo5)
+    do5.grid(row=5, column=1)
+
+    Label(doPage, text="DO 6").grid(column=0, row=6, padx=10, pady=10)
+    do6 = Button(doPage, text="OFF", width=12, command=toggledo6)
+    do6.grid(row=6, column=1)
+
+    Label(doPage, text="DO 7").grid(column=0, row=7, padx=10, pady=10)
+    do7 = Button(doPage, text="OFF", width=12, command=toggledo7)
+    do7.grid(row=7, column=1)
+
+    Label(doPage, text="DO 8").grid(column=0, row=8, padx=10, pady=10)
+    do8 = Button(doPage, text="OFF", width=12, command=toggledo8)
+    do8.grid(row=8, column=1)
+
+    # DI
+
+    diPage = ttk.Frame(nb)
+    nb.add(diPage, text='Digital Input')
+
+    diText1 = Label(diPage, text='OFF', font=("Courier", 15))
+    diText2 = Label(diPage, text='OFF', font=("Courier", 15))
+    diText3 = Label(diPage, text='OFF', font=("Courier", 15))
+    diText4 = Label(diPage, text='OFF', font=("Courier", 15))
+    diText5 = Label(diPage, text='OFF', font=("Courier", 15))
+    diText6 = Label(diPage, text='OFF', font=("Courier", 15))
+    diText7 = Label(diPage, text='OFF', font=("Courier", 15))
+    diText8 = Label(diPage, text='OFF', font=("Courier", 15))
+
+
+
+
+    # Thermocouple
+    thermocouplePage = ttk.Frame(nb)
+    nb.add(thermocouplePage, text='Thermocouple')
+    # nb.Label(main, text="Citriot Data Acquisition System").grid(row=5)
+
+    thermocoupleText1 = Label(thermocouplePage, text='Loading...', font=("Courier", 15))
+    thermocoupleText2 = Label(thermocouplePage, text='Loading...', font=("Courier", 15))
+    thermocoupleText3 = Label(thermocouplePage, text='Loading...', font=("Courier", 15))
+    thermocoupleText4 =Label(thermocouplePage, text='Loading...', font=("Courier", 15))
+    thermocoupleText5 = Label(thermocouplePage, text='Loading...', font=("Courier", 15))
+    thermocoupleText6 = Label(thermocouplePage, text='Loading...', font=("Courier", 15))
+    thermocoupleText7 = Label(thermocouplePage, text='Loading...', font=("Courier", 15))
+    thermocoupleText8 = Label(thermocouplePage, text='Loading...', font=("Courier", 15))
+
+
+
+    # Analog Input
+    analogPage = ttk.Frame(nb)
+    nb.add(analogPage, text='Analog Input')
+
+    analogText1 = Label(analogPage, text='Loading...', font=("Courier", 20))
+    analogText2 = Label(analogPage, text='Loading...', font=("Courier", 20))
+    analogText3 = Label(analogPage, text='Loading...', font=("Courier", 20))
+    analogText4 = Label(analogPage, text='Loading...', font=("Courier", 20))
+    analogText5 = Label(analogPage, text='Loading...', font=("Courier", 20))
+    analogText6 = Label(analogPage, text='Loading...', font=("Courier", 20))
+    analogText7 = Label(analogPage, text='Loading...', font=("Courier", 20))
+    analogText8 = Label(analogPage, text='Loading...', font=("Courier", 20))
+
+
 
     # threads
     t2 = threading.Thread(target=update_main)
@@ -370,9 +521,36 @@ if __name__ == "__main__":
     t2.start()
 
     # Labels
-    data1_ = Label(text="Thermocouple 1").place(x=15, y=100)
+    thermocoupleLabel1 = Label(thermocouplePage, text="Thermocouple 1: ", font=("Courier", 15)).grid(column=1, row=1)
+    thermocoupleLabel2 = Label(thermocouplePage, text="Thermocouple 2: ", font=("Courier", 15)).grid(column=1, row=2)
+    thermocoupleLabel3 = Label(thermocouplePage, text="Thermocouple 3: ", font=("Courier", 15)).grid(column=1, row=3)
+    thermocoupleLabel4 = Label(thermocouplePage, text="Thermocouple 4: ", font=("Courier", 15)).grid(column=1, row=4)
+    thermocoupleLabel5 = Label(thermocouplePage, text="Thermocouple 5: ", font=("Courier", 15)).grid(column=1, row=5)
+    thermocoupleLabel6 = Label(thermocouplePage, text="Thermocouple 6: ", font=("Courier", 15)).grid(column=1, row=6)
+    thermocoupleLabel7 = Label(thermocouplePage, text="Thermocouple 7: ", font=("Courier", 15)).grid(column=1, row=7)
+    thermocoupleLabel8 = Label(thermocouplePage, text="Thermocouple 8: ", font=("Courier", 15)).grid(column=1, row=8)
+
+    analogLabel1 = Label(analogPage, text="Analog Input 1").grid(column=1, row=1)
+    analogLabel2 = Label(analogPage, text="Analog Input 2").grid(column=1, row=2)
+    analogLabel3 = Label(analogPage, text="Analog Input 3").grid(column=1, row=3)
+    analogLabel4 = Label(analogPage, text="Analog Input 4").grid(column=1, row=4)
+    analogLabel5 = Label(analogPage, text="Analog Input 5").grid(column=1, row=5)
+    analogLabel6 = Label(analogPage, text="Analog Input 6").grid(column=1, row=6)
+    analogLabel7 = Label(analogPage, text="Analog Input 7").grid(column=1, row=7)
+    analogLabel8 = Label(analogPage, text="Analog Input 8").grid(column=1, row=8)
+
+    diLabel1 = Label(diPage, text = "Digital Input 1: ").grid(column=1, row=1)
+    diLabel2 = Label(diPage, text="Digital Input 2: ").grid(column=1, row=2)
+    diLabel3 = Label(diPage, text="Digital Input 3: ").grid(column=1, row=3)
+    diLabel4 = Label(diPage, text="Digital Input 4: ").grid(column=1, row=4)
+    diLabel5 = Label(diPage, text="Digital Input 5: ").grid(column=1, row=5)
+    diLabel6 = Label(diPage, text="Digital Input 6: ").grid(column=1, row=6)
+    diLabel7 = Label(diPage, text="Digital Input 7: ").grid(column=1, row=7)
+    diLabel8 = Label(diPage, text="Digital Input 8: ").grid(column=1, row=8)
+
+
     '''
-    data2_ = Label(text="Thermocouple 2").place(x=15, y=130)
+     = Label(text="Thermocouple 2").place(x=15, y=130)
     data3_ = Label(text="Thermocouple 3").place(x=15, y=160)
     data4_ = Label(text="Thermocouple 4").place(x=15, y=190)
     data5_ = Label(text="Thermocouple 5").place(x=15, y=220)
@@ -392,10 +570,11 @@ if __name__ == "__main__":
     # progress_bars
     # Labels
     var = 10
-    #print("FIlter data in _main_ -------------------------", filter_data)
+    # print("FIlter data in _main_ -------------------------", filter_data)
     l1 = ttk.Label(text='he', textvariable=var)
     # label1.pack()
-    progress_1 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
+
+    progress_1 = ttk.Progressbar(thermocouplePage, orient=HORIZONTAL, mode='determinate', length=200, max=255)
     '''
     progress_2 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
     progress_3 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
@@ -414,13 +593,12 @@ if __name__ == "__main__":
     progress_16 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
     '''
 
-
     button_var = IntVar()
-
-
 
     connect = Button(text="Connect", command=connect).place(x=15, y=360)
     disconnect = Button(text="Disconnect", command=disconnect).place(x=300, y=360)
+
+    # Defines and places the notebook widget
 
     # mainloop
     main.geometry('500x500')

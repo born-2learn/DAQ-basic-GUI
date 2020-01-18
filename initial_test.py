@@ -28,11 +28,11 @@ def toggledo1():
                 GPIO.output(25,GPIO.HIGH)
 
 def toggledo2():
-       
+
         if do2.config('text')[-1] == 'ON':
                 do2.config(text='OFF')
                 GPIO.output(17,GPIO.LOW)
-        
+
         else:
                 do2.config(text='ON')
                 GPIO.output(17,GPIO.HIGH)
@@ -51,7 +51,7 @@ def toggledo4():
         if do4.config('text')[-1] == 'ON':
                 do4.config(text='OFF')
                 GPIO.output(27,GPIO.LOW)
-                
+
         else:
                 do4.config(text='ON')
                 GPIO.output(27,GPIO.HIGH)
@@ -96,6 +96,7 @@ main.geometry('500x500')
 
 # gives weight to the cells in the grid
 rows = 0
+while rows < 50:
 while rows < 50:
     main.rowconfigure(rows, weight=1)
     main.columnconfigure(rows, weight=1)
