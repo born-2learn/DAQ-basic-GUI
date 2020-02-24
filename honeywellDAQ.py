@@ -216,27 +216,7 @@ def update_main():
 
 
 
-    # text.place(thermocouplePage, x=15, y=10)
-    # progress_1.grid(column = 1, row = 6)
-    # l1.place(x=60, y=100)
-    # l1.pack()
-    # progress_2.place(x=60, y=130)
-    '''
-    progress_3.place(x=60, y=160)
-    progress_4.place(x=60, y=190)
-    progress_5.place(x=60, y=220)
-    progress_6.place(x=60, y=250)
-    progress_7.place(x=60, y=280)
-    progress_8.place(x=60, y=310)
-    progress_9.place(x=60, y=340)
-    progress_10.place(x=60, y=370)
-    progress_11.place(x=60, y=400)
-    progress_12.place(x=60, y=430)
-    progress_13.place(x=60, y=460)
-    progress_14.place(x=60, y=490)
-    progress_15.place(x=60, y=520)
-    progress_16.place(x=60, y=550)
-    '''
+
     new = time.time()
     global var
     while (1):
@@ -245,32 +225,6 @@ def update_main():
             var = 0
             var = filter_data[0]
 
-            '''
-            thermocoupleText1.delete("1.0", END)
-            thermocoupleText2.delete("1.0", END)
-            thermocoupleText3.delete("1.0", END)
-            thermocoupleText4.delete("1.0", END)
-            thermocoupleText5.delete("1.0", END)
-            thermocoupleText6.delete("1.0", END)
-            thermocoupleText7.delete("1.0", END)
-            thermocoupleText8.delete("1.0", END)
-            analogText1.delete("1.0", END)
-            analogText2.delete("1.0", END)
-            analogText3.delete("1.0", END)
-            analogText4.delete("1.0", END)
-            analogText5.delete("1.0", END)
-            analogText6.delete("1.0", END)
-            analogText7.delete("1.0", END)
-            analogText8.delete("1.0", END)
-            diText1.delete("1.0", END)
-            diText2.delete("1.0", END)
-            diText3.delete("1.0", END)
-            diText4.delete("1.0", END)
-            diText5.delete("1.0", END)
-            diText6.delete("1.0", END)
-            diText7.delete("1.0", END)
-            diText8.delete("1.0", END)
-            '''
 
 
             thermocoupleText1.config(text = filter_data[0])
@@ -302,52 +256,6 @@ def update_main():
 
 
             if time.time() - new >= update_period:
-                '''
-                thermocoupleText1.delete("1.0", END)
-                thermocoupleText2.delete("1.0", END)
-                thermocoupleText3.delete("1.0", END)
-                thermocoupleText4.delete("1.0", END)
-                thermocoupleText5.delete("1.0", END)
-                thermocoupleText6.delete("1.0", END)
-                thermocoupleText7.delete("1.0", END)
-                thermocoupleText8.delete("1.0", END)
-
-                analogText1.delete("1.0", END)
-                analogText2.delete("1.0", END)
-                analogText3.delete("1.0", END)
-                analogText4.delete("1.0", END)
-                analogText5.delete("1.0", END)
-                analogText6.delete("1.0", END)
-                analogText7.delete("1.0", END)
-                analogText8.delete("1.0", END)
-
-                diText1.delete("1.0", END)
-                diText2.delete("1.0", END)
-                diText3.delete("1.0", END)
-                diText4.delete("1.0", END)
-                diText5.delete("1.0", END)
-                diText6.delete("1.0", END)
-                diText7.delete("1.0", END)
-                diText8.delete("1.0", END)
-                
-                progress_1["value"] = 0
-                
-                progress_2["value"] = 0
-                progress_3["value"] = 0
-                progress_4["value"] = 0
-                progress_5["value"] = 0
-                progress_6["value"] = 0
-                progress_7["value"] = 0
-                progress_8["value"] = 0
-                progress_9["value"] = 0
-                progress_10["value"] = 0
-                progress_11["value"] = 0
-                progress_12["value"] = 0
-                progress_13["value"] = 0
-                progress_14["value"] = 0
-                progress_15["value"] = 0
-                progress_16["value"] = 0
-                '''
                 new = time.time()
 
 
@@ -526,24 +434,6 @@ if __name__ == "__main__":
     acc2z = Label(accelerometerPage, text='Accelerometer2 Z Axis').grid(column=1, row=6)
 
 
-    '''
-     = Label(text="Thermocouple 2").place(x=15, y=130)
-    data3_ = Label(text="Thermocouple 3").place(x=15, y=160)
-    data4_ = Label(text="Thermocouple 4").place(x=15, y=190)
-    data5_ = Label(text="Thermocouple 5").place(x=15, y=220)
-    data6_ = Label(text="Thermocouple 6").place(x=15, y=250)
-    data7_ = Label(text="Thermocouple 7").place(x=15, y=280)
-    data8_ = Label(text="Thermocouple 8").place(x=15, y=310)
-    data9_ = Label(text="Data9:").place(x=15, y=340)
-    data10_ = Label(text="Data10:").place(x=15, y=370)
-    data11_ = Label(text="Data11:").place(x=15, y=400)
-    data12_ = Label(text="Data12:").place(x=15, y=430)
-    data13_ = Label(text="Data13:").place(x=15, y=460)
-    data14_ = Label(text="Data14:").place(x=15, y=490)
-    data15_ = Label(text="Data15:").place(x=15, y=520)
-    data16_ = Label(text="Data16:").place(x=15, y=550)
-    '''
-
     # progress_bars
     # Labels
     var = 10
@@ -552,23 +442,6 @@ if __name__ == "__main__":
     # label1.pack()
 
     progress_1 = ttk.Progressbar(thermocouplePage, orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    '''
-    progress_2 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    progress_3 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    progress_4 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    progress_5 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    progress_6 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    progress_7 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    progress_8 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    progress_9 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    progress_10 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    progress_11 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    progress_12 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    progress_13 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    progress_14 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    progress_15 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    progress_16 = ttk.Progressbar(orient=HORIZONTAL, mode='determinate', length=200, max=255)
-    '''
 
     button_var = IntVar()
 
